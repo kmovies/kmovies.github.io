@@ -2,8 +2,7 @@ const API_KEY = '5cfb2e9e20ae09fcd4f2d57501bc6238';
 const BASE_URL = 'https://api.themoviedb.org/3';
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 
-// Get theme toggle button and other elements
-const themeToggle = document.getElementById('themeToggle');
+// Get other elements
 const mediaModal = document.getElementById('mediaModal');
 const videoModal = document.getElementById('videoModal');
 const closeModal = document.querySelectorAll('.close');
@@ -12,16 +11,6 @@ const episodeMenu = document.getElementById('episodeMenu');
 const playButton = document.getElementById('playButton');
 const videoPlayer = document.getElementById('videoPlayer');
 const searchBar = document.getElementById('searchBar');
-
-// Event listener for the theme toggle button
-themeToggle.addEventListener('click', function() {
-    document.body.classList.toggle('dark-mode');
-    if (document.body.classList.contains('dark-mode')) {
-        themeToggle.textContent = 'Switch to Light Mode';
-    } else {
-        themeToggle.textContent = 'Switch to Dark Mode';
-    }
-});
 
 // Close modals when the close button is clicked
 closeModal.forEach(button => {
@@ -70,8 +59,10 @@ async function searchMoviesAndShows(query) {
             fetch(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`),
             fetch(`${BASE_URL}/search/tv?api_key=${API_KEY}&query=${encodeURIComponent(query)}`)
         ]);
+        
         const moviesData = await moviesResponse.json();
         const tvData = await tvResponse.json();
+        
         displayMovies(moviesData.results);
         displayTVShows(tvData.results);
     } catch (error) {
@@ -175,6 +166,7 @@ function displayTVShowSeasons(tvShow) {
 function displayTVShowEpisodes(tvId, seasonNumber, season) {
     const { episodes, name } = season;
     let episodesHtml = `<h4>Episodes of ${name} - Season ${seasonNumber}:</h4><ul>`;
+    
     episodes.forEach(episode => {
         episodesHtml += `<li><strong>Episode ${episode.episode_number}:</strong> ${episode.name} <button onclick="playEpisode(${tvId}, ${seasonNumber}, ${episode.episode_number}, '${episode.name}')">Play</button></li>`;
     });
@@ -226,30 +218,4 @@ function displayRecentlyWatched() {
         posterElement.addEventListener('click', () => {
             if (item.type === 'movie') {
                 showMediaModal(item.id, 'movie', item.title, item.poster);
-            } else if (item.type === 'tv') {
-                playEpisode(item.id, item.season, item.episode, item.title);
-            }
-        });
-
-        recentlyWatchedGrid.appendChild(posterElement);
-    });
-}
-
-// Initialize the app
-document.addEventListener('DOMContentLoaded', () => {
-    fetchTrendingMovies();
-    fetchTrendingTVShows();
-    displayRecentlyWatched();
-
-    // Search functionality
-    searchBar.addEventListener('keyup', (e) => {
-        const query = e.target.value.trim();
-        if (query.length > 0) {
-            searchMoviesAndShows(query);
-        } else {
-            // Reload trending movies and TV shows if the search is cleared
-            fetchTrendingMovies();
-            fetchTrendingTVShows();
-        }
-    });
-});
+            } else if (item.type === 'tv')
