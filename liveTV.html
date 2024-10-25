@@ -23,63 +23,51 @@
     <main>
         <section id="liveTvChannels">
             <h2>Choose a Channel</h2>
+
+            <!-- Search Bar -->
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search for a channel..." onkeyup="filterChannels()">
+            </div>
+
             <div class="content-grid">
                 
-                <!-- Example Channel: ESPN Deportes -->
-                <div class="channel-poster">
+                <!-- Channel Examples -->
+                <div class="channel-poster" data-channel="ESPN">
+                    <img src="poster/espn-poster.jpg" alt="ESPN Poster" class="poster" onclick="openPlayer('https://topembed.pw/channel/ESPN[USA]')" />
+                    <h3>ESPN [USA]</h3>
+                </div>
+                <div class="channel-poster" data-channel="ESPN Deportes">
                     <img src="poster/espn-deportes-poster.jpg" alt="ESPN Deportes Poster" class="poster" onclick="openPlayer('https://topembed.pw/channel/ESPNDeportes[USA]')" />
                     <h3>ESPN Deportes [USA]</h3>
                 </div>
-
-                <!-- Add the following channels below in a similar format -->
-                <!-- Channel: ACC Network -->
-                <div class="channel-poster">
-                    <img src="poster/accn-poster.jpg" alt="accn Poster" class="poster" onclick="openPlayer('https://topembed.pw/channel/ACCNetwork[USA]')" />
+                <div class="channel-poster" data-channel="ACC Network">
+                    <img src="poster/accn-poster.jpg" alt="ACC Network Poster" class="poster" onclick="openPlayer('https://topembed.pw/channel/ACCNetwork[USA]')" />
                     <h3>ACCN [USA]</h3>
                 </div>
-       <!-- Add the following channels below in a similar format -->
-                <!-- Channel: BTN -->
-                <div class="channel-poster">
+                <div class="channel-poster" data-channel="BTN">
                     <img src="poster/BTN-poster.jpg" alt="BTN Poster" class="poster" onclick="openPlayer('https://topembed.pw/channel/BTN[USA]')" />
                     <h3>BTN [USA]</h3>
                 </div>
-
-                <!-- Channel: ESPNU -->
-                <div class="channel-poster">
+                <div class="channel-poster" data-channel="ESPNU">
                     <img src="poster/espnu-poster.jpg" alt="ESPNU Poster" class="poster" onclick="openPlayer('https://topembed.pw/channel/ESPNU[USA]')" />
                     <h3>ESPNU [USA]</h3>
                 </div>
-
-                <!-- Channel: FOX Sports 1 -->
-                <div class="channel-poster">
+                <div class="channel-poster" data-channel="FOX Sports 1">
                     <img src="poster/fox-sports1-poster.jpg" alt="FOX Sports 1 Poster" class="poster" onclick="openPlayer('https://topembed.pw/channel/FOXSports1[USA]')" />
                     <h3>FOX Sports 1 [USA]</h3>
                 </div>
-
-                <!-- Channel: FOX Sports 2 -->
-                <div class="channel-poster">
-                    <img src="poster/fox-sports2-poster.jpg" alt="FOX Sports 2 Poster" class="poster" onclick="openPlayer('https://topembed.pw/channel/FOXSports2[USA]')" />
-                    <h3>FOX Sports 2 [USA]</h3>
-                </div>
-
-                <!-- Channel: Golf Channel -->
-                <div class="channel-poster">
+                <div class="channel-poster" data-channel="Golf Channel">
                     <img src="poster/golf-channel-poster.jpg" alt="Golf Channel Poster" class="poster" onclick="openPlayer('https://topembed.pw/channel/GOLFChannel[USA]')" />
                     <h3>Golf Channel [USA]</h3>
                 </div>
-
-                <!-- Channel: NBA TV -->
-                <div class="channel-poster">
+                <div class="channel-poster" data-channel="NBA TV">
                     <img src="poster/nba-tv-poster.jpg" alt="NBA TV Poster" class="poster" onclick="openPlayer('https://topembed.pw/channel/NBATV[USA]')" />
                     <h3>NBA TV [USA]</h3>
                 </div>
-
-                <!-- Channel: NFL Network -->
-                <div class="channel-poster">
+                <div class="channel-poster" data-channel="NFL Network">
                     <img src="poster/nfl-network-poster.jpg" alt="NFL Network Poster" class="poster" onclick="openPlayer('https://topembed.pw/channel/NFLNetwork[USA]')" />
                     <h3>NFL Network [USA]</h3>
                 </div>
-
                 <!-- Channel: NFL Redzone -->
                 <div class="channel-poster">
                     <img src="poster/nfl-redzone-poster.jpg" alt="NFL Redzone Poster" class="poster" onclick="openPlayer('https://topembed.pw/channel/NFLRedzone[USA]')" />
@@ -129,10 +117,10 @@
 		<!-- Channel: Sportsnet One -->
                 <div class="channel-poster">
                     <img src="poster/sportsnet-one-poster.jpg" alt="Sportsnet One Poster" class="poster" onclick="openPlayer('https://topembed.pw/channel/SportsnetOne[Canada]')" />
-                    <h3>Sportsnet One [USA]</h3>
+                    <h3>Sportsnet One [Canada]</h3>
                 </div>
                 <!-- Add other remaining channels here in similar format -->
-                
+
             </div>
         </section>
     </main>
@@ -170,7 +158,23 @@
                 liveTvPlayer.src = '';
             }
         }
+
+        // Search filter function
+        function filterChannels() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const channels = document.querySelectorAll('.channel-poster');
+
+            channels.forEach(channel => {
+                const channelName = channel.getAttribute('data-channel').toLowerCase();
+                if (channelName.includes(searchInput)) {
+                    channel.style.display = 'block';
+                } else {
+                    channel.style.display = 'none';
+                }
+            });
+        }
     </script>
 </body>
 
 </html>
+
