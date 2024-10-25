@@ -77,6 +77,24 @@ h3 {
     padding: 20px;
 }
 
+/* Style for Live TV Channel Posters */
+.channel-poster {
+    text-align: center; /* Center align the text and image */
+    margin: 20px; /* Space between posters */
+}
+
+.channel-poster img.poster {
+    width: 250px; /* Set width to 400px */
+    height: 250px; /* Set height to 400px */
+    object-fit: cover; /* Ensures the image covers the area without distortion */
+    cursor: pointer; /* Change cursor to pointer when hovering over the image */
+    transition: transform 0.3s; /* Smooth hover effect */
+}
+
+.channel-poster img.poster:hover {
+    transform: scale(1.05); /* Slight zoom effect on hover */
+}
+
 /* Poster Styles */
 .poster {
     width: 150px;
