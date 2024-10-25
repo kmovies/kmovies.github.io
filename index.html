@@ -4,132 +4,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live TV | Kings Movies and TV</title>
+    <title>Kings Movies and TV | KMAT</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="dark-mode">
+<body class="dark-mode"> <!-- Default dark-mode class -->
     <header>
         <nav>
             <ul>
                 <li><a href="index.html" id="homeButton">Home</a></li>
                 <li><a href="recentlyWatched.html">Recently Watched</a></li>
-                <li><a href="liveTV.html">Live TV</a></li>
+                <li><a href="liveTV.html">Live TV</a></li> <!-- Optional Live TV button -->
             </ul>
         </nav>
-        <h1>Live TV Streaming</h1>
+        <h1>Movies and TV Shows</h1>
+        <input type="text" id="searchBar" placeholder="Search for a movie or TV show..." />
     </header>
 
     <main>
-        <section id="liveTvChannels">
-            <h2>Choose a Channel</h2>
-            <div class="content-grid">
-                
-                <!-- Example Channel: ESPN Deportes -->
-                <div class="channel-poster">
-                    <img src="poster/espn-deportes-poster.jpg" alt="ESPN Deportes Poster" class="poster" onclick="openPlayer('https://topembed.pw/channel/ESPNDeportes[USA]')" />
-                    <h3>ESPN Deportes [USA]</h3>
-                </div>
-
-                <!-- Add the following channels below in a similar format -->
-                <!-- Channel: ACC Network -->
-                <div class="channel-poster">
-                    <img src="poster/accn-poster.jpg" alt="accn Poster" class="poster" onclick="openPlayer('https://topembed.pw/channel/ACCNetwork[USA]')" />
-                    <h3>ACCN [USA]</h3>
-                </div>
-       <!-- Add the following channels below in a similar format -->
-                <!-- Channel: BTN -->
-                <div class="channel-poster">
-                    <img src="poster/BTN-poster.jpg" alt="BTN Poster" class="poster" onclick="openPlayer('https://topembed.pw/channel/BTN[USA]')" />
-                    <h3>BTN [USA]</h3>
-                </div>
-
-                <!-- Channel: ESPNU -->
-                <div class="channel-poster">
-                    <img src="poster/espnu-poster.jpg" alt="ESPNU Poster" class="poster" onclick="openPlayer('https://topembed.pw/channel/ESPNU[USA]')" />
-                    <h3>ESPNU [USA]</h3>
-                </div>
-
-                <!-- Channel: FOX Sports 1 -->
-                <div class="channel-poster">
-                    <img src="poster/fox-sports1-poster.jpg" alt="FOX Sports 1 Poster" class="poster" onclick="openPlayer('https://topembed.pw/channel/FOXSports1[USA]')" />
-                    <h3>FOX Sports 1 [USA]</h3>
-                </div>
-
-                <!-- Channel: FOX Sports 2 -->
-                <div class="channel-poster">
-                    <img src="poster/fox-sports2-poster.jpg" alt="FOX Sports 2 Poster" class="poster" onclick="openPlayer('https://topembed.pw/channel/FOXSports2[USA]')" />
-                    <h3>FOX Sports 2 [USA]</h3>
-                </div>
-
-                <!-- Channel: Golf Channel -->
-                <div class="channel-poster">
-                    <img src="poster/golf-channel-poster.jpg" alt="Golf Channel Poster" class="poster" onclick="openPlayer('https://topembed.pw/channel/GOLFChannel[USA]')" />
-                    <h3>Golf Channel [USA]</h3>
-                </div>
-
-                <!-- Channel: NBA TV -->
-                <div class="channel-poster">
-                    <img src="poster/nba-tv-poster.jpg" alt="NBA TV Poster" class="poster" onclick="openPlayer('https://topembed.pw/channel/NBATV[USA]')" />
-                    <h3>NBA TV [USA]</h3>
-                </div>
-
-                <!-- Channel: NFL Network -->
-                <div class="channel-poster">
-                    <img src="poster/nfl-network-poster.jpg" alt="NFL Network Poster" class="poster" onclick="openPlayer('https://topembed.pw/channel/NFLNetwork[USA]')" />
-                    <h3>NFL Network [USA]</h3>
-                </div>
-
-                <!-- Channel: NFL Redzone -->
-                <div class="channel-poster">
-                    <img src="poster/nfl-redzone-poster.jpg" alt="NFL Redzone Poster" class="poster" onclick="openPlayer('https://topembed.pw/channel/NFLRedzone[USA]')" />
-                    <h3>NFL Redzone [USA]</h3>
-                </div>
-
-                <!-- Add all other channels similarly by following the structure. -->
-
-                <!-- Example for one of the Tennis Channel Plus -->
-                <div class="channel-poster">
-                    <img src="poster/tennis-channel-plus1-poster.jpg" alt="Tennis Channel Plus 1 Poster" class="poster" onclick="openPlayer('https://topembed.pw/channel/TennisChannelPlus1[USA]')" />
-                    <h3>Tennis Channel Plus 1 [USA]</h3>
-                </div>
-
-                <!-- Repeat for other channels like BallySports, Sportsnet, and others -->
-
-                <!-- Channel: USA Network -->
-                <div class="channel-poster">
-                    <img src="poster/usa-network-poster.jpg" alt="USA Network Poster" class="poster" onclick="openPlayer('https://topembed.pw/channel/USANetwork[USA]')" />
-                    <h3>USA Network [USA]</h3>
-                </div>
-
-                <!-- Channel: Willow TV -->
-                <div class="channel-poster">
-                    <img src="poster/willow-tv-poster.jpg" alt="Willow TV Poster" class="poster" onclick="openPlayer('https://topembed.pw/channel/WillovTV[USA]')" />
-                    <h3>Willow TV [USA]</h3>
-                </div>
-
-		<!-- Channel: Yes -->
-                <div class="channel-poster">
-                    <img src="poster/yes-poster.jpg" alt="YES Poster" class="poster" onclick="openPlayer('https://topembed.pw/channel/YES[USA]')" />
-                    <h3>Yes [USA]</h3>
-                </div>
-
-		<!-- Channel: Max -->
-                <div class="channel-poster">
-                    <img src="poster/Max-poster.jpg" alt="Max Poster" class="poster" onclick="openPlayer('https://topembed.pw/channel/Max[USA]')" />
-                    <h3>Max [USA]</h3>
-                </div>
-                <!-- Add other remaining channels here in similar format -->
-                
+        <!-- Trending Movies Section -->
+        <section id="moviesSection">
+            <h1>Trending Movies</h1>
+            <div id="movieGrid" class="content-grid"></div>
+            <div>
+                <input type="text" id="movieURL" placeholder="Enter movie ID">
+                <button id="movieSubmit">Go to Movie</button>
             </div>
         </section>
+
+        <!-- Trending TV Shows Section -->
+        <section id="tvShowsSection">
+            <h1>Trending TV Shows</h1>
+            <div id="tvGrid" class="content-grid"></div>
+            <div>
+                <input type="text" id="tvURL" placeholder="Enter TV Show ID, Season, Episode (comma-separated)">
+                <button id="tvSubmit">Go to TV Show</button>
+            </div>
+        </section>
+
+        <!-- Recently Watched Section -->
+        <section id="recentlyWatchedSection">
+            <h1>Recently Watched</h1>
+            <div id="recentlyWatchedGrid" class="content-grid"></div>
+        </section>
     </main>
+
+    <!-- Media Modal Structure -->
+    <div id="mediaModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="mediaDetails"></div>
+            <div id="episodeMenu"></div> <!-- Episode Menu will go here -->
+            <button id="playButton">Play</button>
+        </div>
+    </div>
 
     <!-- Video Modal -->
     <div id="videoModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <iframe id="liveTvPlayer" width="100%" height="600px" frameborder="0" allowfullscreen></iframe>
+            <iframe id="videoPlayer" width="100%" height="600px" frameborder="0" allowfullscreen></iframe>
         </div>
     </div>
 
@@ -137,28 +71,8 @@
         <p>&copy; 2024 Kings Movies and TV. All rights reserved.</p>
     </footer>
 
-    <script>
-        const videoModal = document.getElementById('videoModal');
-        const liveTvPlayer = document.getElementById('liveTvPlayer');
-        const closeModal = document.querySelector('.close');
-
-        function openPlayer(url) {
-            liveTvPlayer.src = url;
-            videoModal.style.display = 'block';
-        }
-
-        closeModal.onclick = function () {
-            videoModal.style.display = 'none';
-            liveTvPlayer.src = '';
-        };
-
-        window.onclick = function (event) {
-            if (event.target === videoModal) {
-                videoModal.style.display = 'none';
-                liveTvPlayer.src = '';
-            }
-        }
-    </script>
+    <script src="app.js"></script>
+    <script src="script.js"></script> <!-- Link to your JavaScript files -->
 </body>
 
 </html>
