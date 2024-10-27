@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live TV - King's Movies & TV</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-900 text-white">
+    <header class="bg-gray-800 py-4">
+        <div class="container mx-auto px-4">
+            <nav class="flex items-center justify-between">
+                <a href="/" class="text-2xl font-bold">King's Movies & TV</a>
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="hover:text-gray-300">Home</a>
+                    <a href="movies.html" class="hover:text-gray-300">Movies</a>
+                    <a href="tv-shows.html" class="hover:text-gray-300">TV Shows</a>
+                    <a href="live-tv.html" class="hover:text-gray-300">Live TV</a>
+                    <a href="about.html" class="hover:text-gray-300">About</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <h1 class="text-4xl font-bold mb-8">Live TV</h1>
+        <form id="search-form" class="flex max-w-md mb-8">
+            <input type="text" id="search-input" placeholder="Search channels" class="flex-grow px-4 py-2 rounded-l-md text-black">
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-r-md hover:bg-blue-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                </svg>
+            </button>
+        </form>
+        <div id="channel-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Channel cards will be dynamically inserted here -->
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 py-6 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2023 King's Movies & TV. All rights reserved.</p>
+        </div>
+    </footer>
+
+   <script>
+    const channels = [
+    {
+        id: "ABCNews[USA]",
+        name: "ABC News",
+        description: "American news channel providing breaking news and analysis.",
+        image: "https://placehold.co/400x200?text=ABC+News"
+    },
+    {
+        id: "AbcTv[USA]",
+        name: "ABC TV",
+        description: "American broadcast television network.",
+        image: "https://placehold.co/400x200?text=ABC+TV"
+    },
+    {
+        id: "AMC[USA]",
+        name: "AMC",
+        description: "Network known for original dramas and movies.",
+        image: "https://placehold.co/400x200?text=AMC"
+    },
+    {
+        id: "AnimalPlanet[USA]",
+        name: "Animal Planet",
+        description: "Channel focused on wildlife and animal programming.",
+        image: "https://placehold.co/400x200?text=Animal+Planet"
+    },
+    {
+        id: "AxsTv[USA]",
+        name: "Axs TV",
+        description: "Channel focused on music, entertainment, and pop culture.",
+        image: "https://placehold.co/400x200?text=Axs+TV"
+    },
+    {
+        id: "BBCAmerica[USA]",
+        name: "BBC America",
+        description: "Channel featuring British dramas and comedies.",
+        image: "https://placehold.co/400x200?text=BBC+America"
+    },
+    {
+        id: "BET[USA]",
+        name: "BET",
+        description: "Network focused on African American culture and entertainment.",
+        image: "https://placehold.co/400x200?text=BET"
+    },
+    {
+        id: "Boomerang[USA]",
+        name: "Boomerang",
+        description: "Channel featuring classic cartoons and animated series.",
+        image: "https://placehold.co/400x200?text=Boomerang"
+    },
+    {
+        id: "BravoTV[USA]",
+        name: "Bravo TV",
+        description: "Network featuring reality shows and lifestyle programming.",
+        image: "https://placehold.co/400x200?text=Bravo+TV"
+    },
+    {
+        id: "CBS[USA]",
+        name: "CBS",
+        description: "Broadcast network with a variety of popular shows and sports.",
+        image: "https://placehold.co/400x200?text=CBS"
+    },
+    {
+        id: "CBSSN[USA]",
+        name: "CBS Sports Network",
+        description: "Sports network featuring live events and sports programming.",
+        image: "https://placehold.co/400x200?text=CBS+Sports+Network"
+    },
+    {
+        id: "Cinemax[USA]",
+        name: "Cinemax",
+        description: "Premium cable channel featuring movies and original series.",
+        image: "https://placehold.co/400x200?text=Cinemax"
+    },
+    {
+        id: "CNBC[USA]",
+        name: "CNBC",
+        description: "Business news network providing financial and economic coverage.",
+        image: "https://placehold.co/400x200?text=CNBC"
+    },
+    {
+        id: "CNN[USA]",
+        name: "CNN",
+        description: "Global news network providing breaking news and analysis.",
+        image: "https://placehold.co/400x200?text=CNN"
+    },
+    {
+        id: "CW[USA]",
+        name: "CW",
+        description: "Television network featuring popular series and dramas.",
+        image: "https://placehold.co/400x200?text=CW"
+    },
+    {
+        id: "DisneyChannel[USA]",
+        name: "Disney Channel",
+        description: "Family entertainment channel featuring children's programming.",
+        image: "https://placehold.co/400x200?text=Disney+Channel"
+    },
+    {
+        id: "DisneyJR[USA]",
+        name: "Disney Junior",
+        description: "Children's channel featuring animated and live-action programming.",
+        image: "https://placehold.co/400x200?text=Disney+Junior"
+    },
+    {
+        id: "EEntertainement[USA]",
+        name: "E! Entertainment",
+        description: "Entertainment network focusing on celebrity news and reality shows.",
+        image: "https://placehold.co/400x200?text=E+Entertainment"
+    },
+    {
+        id: "ESPNNews[USA]",
+        name: "ESPN News",
+        description: "24-hour sports news network providing highlights and analysis.",
+        image: "https://placehold.co/400x200?text=ESPN+News"
+    },
+    {
+        id: "FoodNetwork[USA]",
+        name: "Food Network",
+        description: "Channel featuring cooking shows and culinary competitions.",
+        image: "https://placehold.co/400x200?text=Food+Network"
+    },
+    {
+        id: "Fox[USA]",
+        name: "Fox",
+        description: "Broadcast network with a variety of entertainment and news programming.",
+        image: "https://placehold.co/400x200?text=Fox"
+    },
+    {
+        id: "FoxNews[USA]",
+        name: "Fox News",
+        description: "Cable news channel providing political news and analysis.",
+        image: "https://placehold.co/400x200?text=Fox+News"
+    },
+    {
+        id: "Freeform[USA]",
+        name: "Freeform",
+        description: "Entertainment network featuring popular shows and movies for young adults.",
+        image: "https://placehold.co/400x200?text=Freeform"
+    },
+    {
+        id: "HGTV[USA]",
+        name: "HGTV",
+        description: "Home and garden network featuring renovation shows and design tips.",
+        image: "https://placehold.co/400x200?text=HGTV"
+    },
+    {
+        id: "History[USA]",
+        name: "History",
+        description: "Network focusing on historical programming and documentaries.",
+        image: "https://placehold.co/400x200?text=History"
+    },
+    {
+        id: "InvestigationDiscovery[USA]",
+        name: "Investigation Discovery",
+        description: "Network focused on true crime and investigative programming.",
+        image: "https://placehold.co/400x200?text=Investigation+Discovery"
+    },
+    {
+        id: "Lifetime[USA]",
+        name: "Lifetime",
+        description: "Channel featuring movies and series for women.",
+        image: "https://placehold.co/400x200?text=Lifetime"
+    },
+    {
+        id: "LifetimeMoviesNetwork[USA]",
+        name: "Lifetime Movies Network",
+        description: "Channel featuring made-for-TV movies and dramas.",
+        image: "https://placehold.co/400x200?text=Lifetime+Movies+Network"
+    },
+    {
+        id: "Max[USA]",
+        name: "Max",
+        description: "Streaming service featuring HBO and Warner Bros. content.",
+        image: "https://placehold.co/400x200?text=Max"
+    },
+    {
+        id: "MSNBC[USA]",
+        name: "MSNBC",
+        description: "Cable news channel providing news coverage and political analysis.",
+        image: "https://placehold.co/400x200?text=MSNBC"
+    },
+    {
+        id: "NationalGeographic[USA]",
+        name: "National Geographic",
+        description: "Network focused on nature, science, and exploration.",
+        image: "https://placehold.co/400x200?text=National+Geographic"
+    },
+    {
+        id: "NBA TV[USA]",
+        name: "NBA TV",
+        description: "Channel dedicated to basketball coverage and analysis.",
+        image: "https://placehold.co/400x200?text=NBA+TV"
+    },
+    {
+        id: "NFLNetwork[USA]",
+        name: "NFL Network",
+        description: "Sports network dedicated to NFL games and analysis.",
+        image: "https://placehold.co/400x200?text=NFL+Network"
+    },
+    {
+        id: "NFLRedzone[USA]",
+        name: "NFL RedZone",
+        description: "Channel showing live look-ins at NFL games.",
+        image: "https://placehold.co/400x200?text=NFL+RedZone"
+    },
+    {
+        id: "NHLNetwork[USA]",
+        name: "NHL Network",
+        description: "Dedicated to hockey coverage and live games.",
+        image: "https://placehold.co/400x200?text=NHL+Network"
+    },
+    {
+        id: "NickelodeonTV[USA]",
+        name: "Nickelodeon TV",
+        description: "Kids' entertainment network with popular cartoons and family shows.",
+        image: "https://placehold.co/400x200?text=Nickelodeon+TV"
+    },
+    {
+        id: "Nicktoons[USA]",
+        name: "Nicktoons",
+        description: "Cartoons and animated programming from Nickelodeon.",
+        image: "https://placehold.co/400x200?text=Nicktoons"
+    },
+    {
+        id: "SECNetwork[USA]",
+        name: "SEC Network",
+        description: "Sports network covering SEC college athletics.",
+        image: "https://placehold.co/400x200?text=SEC+Network"
+    },
+    {
+        id: "Showtime[USA]",
+        name: "Showtime",
+        description: "Premium entertainment network featuring movies, series, and sports.",
+        image: "https://placehold.co/400x200?text=Showtime"
+    },
+    {
+        id: "Syfy[USA]",
+        name: "Syfy",
+        description: "Channel featuring science fiction, fantasy, and horror programming.",
+        image: "https://placehold.co/400x200?text=Syfy"
+    },
+    {
+        id: "TBS[USA]",
+        name: "TBS",
+        description: "Comedy, sports, and entertainment programming for all ages.",
+        image: "https://placehold.co/400x200?text=TBS"
+    },
+    {
+        id: "TennisChannel[USA]",
+        name: "Tennis Channel",
+        description: "Network dedicated to tennis coverage and events.",
+        image: "https://placehold.co/400x200?text=Tennis+Channel"
+    },
+    {
+        id: "TLC[USA]",
+        name: "TLC",
+        description: "Channel featuring reality shows and lifestyle programming.",
+        image: "https://placehold.co/400x200?text=TLC"
+    },
+    {
+        id: "TUDN[USA]",
+        name: "TUDN",
+        description: "Spanish-language sports network covering soccer and other events.",
+        image: "https://placehold.co/400x200?text=TUDN"
+    },
+    {
+        id: "TvLand[USA]",
+        name: "TV Land",
+        description: "Network featuring classic and contemporary sitcoms.",
+        image: "https://placehold.co/400x200?text=TV+Land"
+    },
+    {
+        id: "USANetwork[USA]",
+        name: "USA Network",
+        description: "Channel featuring original programming and popular series.",
+        image: "https://placehold.co/400x200?text=USA+Network"
+    },
+    {
+        id: "WNYW[USA]",
+        name: "WNYW",
+        description: "Local Fox television station in New York City.",
+        image: "https://placehold.co/400x200?text=WNYW"
+    },
+    {
+        id: "WillowTV[USA]",
+        name: "Willow TV",
+        description: "Dedicated to cricket coverage and live events.",
+        image: "https://placehold.co/400x200?text=Willow+TV"
+    },
+    {
+        id: "WweNetwork[USA]",
+        name: "WWE Network",
+        description: "Streaming service for all WWE events and original programming.",
+        image: "https://placehold.co/400x200?text=WWE+Network"
+    },
+    {
+        id: "YES[USA]",
+        name: "YES Network",
+        description: "Regional sports network covering New York Yankees and Brooklyn Nets.",
+        image: "https://placehold.co/400x200?text=YES+Network"
+    }
+];
+
+
+
+
+        function createChannelCard(channel) {
+            const card = document.createElement('div');
+            card.className = 'bg-gray-800 rounded-lg overflow-hidden';
+            card.innerHTML = `
+                <img src="${channel.image}" alt="${channel.name}" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h2 class="text-xl font-bold mb-2">${channel.name}</h2>
+                    <p class="text-gray-400 mb-4">${channel.description}</p>
+                    <a href="live-tv-player.html?id=${channel.id}&name=${encodeURIComponent(channel.name)}" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 inline-block">Watch Now</a>
+                </div>
+            `;
+            return card;
+        }
+
+        function displayChannels(channelsToDisplay) {
+            const channelGrid = document.getElementById('channel-grid');
+            channelGrid.innerHTML = '';
+            channelsToDisplay.forEach(channel => {
+                channelGrid.appendChild(createChannelCard(channel));
+            });
+        }
+
+        function searchChannels(query) {
+            return channels.filter(channel => 
+                channel.name.toLowerCase().includes(query.toLowerCase()) ||
+                channel.description.toLowerCase().includes(query.toLowerCase())
+            );
+        }
+
+        const searchForm = document.getElementById('search-form');
+        const searchInput = document.getElementById('search-input');
+
+        searchForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const query = searchInput.value.trim();
+            if (query) {
+                const searchResults = searchChannels(query);
+                displayChannels(searchResults);
+            } else {
+                displayChannels(channels);
+            }
+        });
+
+        // Initial display of all channels
+        displayChannels(channels);
+    </script>
+</body>
+</html>
