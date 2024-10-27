@@ -69,13 +69,13 @@
         const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 
         async function fetchFeaturedMovies() {
-            const response = await fetch(${API_BASE_URL}/movie/popular?api_key=${API_KEY});
+            const response = await fetch(`${API_BASE_URL}/movie/popular?api_key=${API_KEY}`);
             const data = await response.json();
             return data.results.slice(0, 5);
         }
 
         async function fetchPopularTVShows() {
-            const response = await fetch(${API_BASE_URL}/tv/popular?api_key=${API_KEY});
+            const response = await fetch(`${API_BASE_URL}/tv/popular?api_key=${API_KEY}`);
             const data = await response.json();
             return data.results.slice(0, 5);
         }
@@ -83,13 +83,13 @@
         function createMediaCard(item, isMovie = true) {
             const card = document.createElement('div');
             card.className = 'bg-gray-800 rounded-lg overflow-hidden';
-            card.innerHTML = 
+            card.innerHTML = `
                 <img src="${IMAGE_BASE_URL}${item.poster_path}" alt="${isMovie ? item.title : item.name}" class="w-full h-auto">
                 <div class="p-4">
                     <h3 class="font-bold mb-2">${isMovie ? item.title : item.name}</h3>
                     <p class="text-sm text-gray-400">${new Date(isMovie ? item.release_date : item.first_air_date).getFullYear()}</p>
                 </div>
-            ;
+            `;
             return card;
         }
 
