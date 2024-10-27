@@ -29,32 +29,33 @@
     </header>
 
     <main class="container mx-auto px-4 py-8">
-        <div id="player-container" class="w-full max-w-4xl mx-auto bg-gray-800 rounded-lg overflow-hidden">
-            <div class="p-4 flex items-center justify-between">
-                <a href="#" id="back-link" class="flex items-center text-gray-300 hover:text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
-                    </svg>
-                    Back to TV Shows
-                </a>
-                <h2 id="show-title" class="text-xl font-bold"></h2>
-            </div>
-            <div id="player" class="aspect-w-16 aspect-h-9 bg-black">
-                <!-- Player iframe will be inserted here -->
-            </div>
-            <div id="episode-info" class="p-4">
-                <p class="text-lg">Season <span id="season-number"></span>, Episode <span id="episode-number"></span></p>
-            </div>
-            <div id="episode-list" class="p-4">
-                <h3 class="text-lg font-bold mb-2">Episodes</h3>
-                <div id="season-buttons" class="flex flex-wrap gap-2 mb-4">
-                    <!-- Season buttons will be dynamically inserted here -->
-                </div>
-                <div id="episode-buttons" class="grid grid-cols-5 gap-2">
-                    <!-- Episode buttons will be dynamically inserted here -->
-                </div>
-            </div>
+       <div id="player-container" class="w-full max-w-6xl mx-auto bg-gray-800 rounded-lg overflow-hidden">
+    <div class="p-4 flex items-center justify-between">
+        <a href="#" id="back-link" class="flex items-center text-gray-300 hover:text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+            </svg>
+            Back to TV Shows
+        </a>
+        <h2 id="show-title" class="text-xl font-bold"></h2>
+    </div>
+    <div id="player" class="bg-black" style="height: 75vh;">
+        <!-- Player iframe will be inserted here -->
+    </div>
+    <div id="episode-info" class="p-4">
+        <p class="text-lg">Season <span id="season-number"></span>, Episode <span id="episode-number"></span></p>
+    </div>
+    <div id="episode-list" class="p-4">
+        <h3 class="text-lg font-bold mb-2">Episodes</h3>
+        <div id="season-buttons" class="flex flex-wrap gap-2 mb-4">
+            <!-- Season buttons will be dynamically inserted here -->
         </div>
+        <div id="episode-buttons" class="grid grid-cols-5 gap-2">
+            <!-- Episode buttons will be dynamically inserted here -->
+        </div>
+    </div>
+</div>
+
     </main>
 
     <footer class="bg-gray-800 py-6 mt-12">
