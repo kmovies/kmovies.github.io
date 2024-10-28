@@ -16,9 +16,9 @@
     <header class="bg-gray-800 py-4">
         <div class="container mx-auto px-4">
             <nav class="flex items-center justify-between">
-                <a href="/" class="text-2xl font-bold">King's Movies & TV</a>
+                <a href="index.html" class="text-2xl font-bold">King's Movies & TV</a>
                 <div class="flex items-center space-x-4">
-                    <a href="/" class="hover:text-gray-300">Home</a>
+                    <a href="index.html" class="hover:text-gray-300">Home</a>
                     <a href="movies.html" class="hover:text-gray-300">Movies</a>
                     <a href="tv-shows.html" class="hover:text-gray-300">TV Shows</a>
                     <a href="live-tv.html" class="hover:text-gray-300">Live TV</a>
@@ -31,4 +31,123 @@
     <main class="container mx-auto px-4 py-8">
         <section class="mb-12">
             <h1 class="text-4xl font-bold mb-4">Movies</h1>
-            <p class="text-xl mb-6">Explore our vast collection 
+            <p class="text-xl mb-6">Explore our vast collection of movies across all genres.</p>
+            <form id="search-form" class="flex max-w-md mb-8">
+                <input type="text" id="search-input" placeholder="Search movies" class="flex-grow px-4 py-2 rounded-l-md text-black">
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-r-md hover:bg-blue-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </form>
+        </section>
+
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold mb-4">New Releases</h2>
+            <div id="new-releases" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                <!-- New releases will be dynamically inserted here -->
+            </div>
+        </section>
+
+        <section>
+            <h2 class="text-2xl font-bold mb-4">Top Rated Movies</h2>
+            <div id="top-rated" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                <!-- Top rated movies will be dynamically inserted here -->
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 py-6 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2023 King's Movies & TV. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const API_KEY = '5cfb2e9e20ae09fcd4f2d57501bc6238';
+        const API_BASE_URL = 'https://api.themoviedb.org/3';
+        const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
+
+        async function fetchNewReleases() {
+            const response = await fetch(`${API_BASE_URL}/movie/now_playing?api_key=${API_KEY}`);
+            const data = await response.json();
+            return data.results.slice(0, 10);
+        }
+
+        async function fetchTopRated() {
+            const response = await fetch(`${API_BASE_URL}/movie/top_rated?api_key=${API_KEY}`);
+            const data = await response.json();
+            return data.results.slice(0, 10);
+        }
+
+        function createMovieCard(movie) {
+            const card = document.createElement('div');
+            card.className = 'bg-gray-800 rounded-lg overflow-hidden';
+            card.innerHTML = `
+                <div class="relative">
+                    <img src="${IMAGE_BASE_URL}${movie.poster_path}" alt="${movie.title}" class="w-full h-auto">
+                    <a href="movie-player.html?id=${movie.id}&title=${encodeURIComponent(movie.title)}" class="absolute bottom-2 right-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0  000-1.664l-3-2z" clip-rule="evenodd" />
+                        </svg>
+                        Play
+                    </a>
+                </div>
+                <div class="p-4">
+                    <h3 class="font-bold mb-2">${movie.title}</h3>
+                    <p class="text-sm text-gray-400 mb-2">${new Date(movie.release_date).getFullYear()}</p>
+                    <p class="text-sm line-clamp-3">${movie.overview}</p>
+                </div>
+            `;
+            return card;
+        }
+
+        async function initializePage() {
+            const newReleases = await fetchNewReleases();
+            const topRated = await fetchTopRated();
+
+            const newReleasesContainer = document.getElementById('new-releases');
+            newReleases.forEach(movie => {
+                newReleasesContainer.appendChild(createMovieCard(movie));
+            });
+
+            const topRatedContainer = document.getElementById('top-rated');
+            topRated.forEach(movie => {
+                topRatedContainer.appendChild(createMovieCard(movie));
+            });
+        }
+
+        const searchForm = document.getElementById('search-form');
+        const searchInput = document.getElementById('search-input');
+
+        searchForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const query = searchInput.value.trim();
+            if (query) {
+                const searchResults = await searchMovies(query);
+                displaySearchResults(searchResults);
+            }
+        });
+
+        async function searchMovies(query) {
+            const response = await fetch(`${API_BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
+            const data = await response.json();
+            return data.results;
+        }
+
+        function displaySearchResults(results) {
+            const newReleasesContainer = document.getElementById('new-releases');
+            const topRatedContainer = document.getElementById('top-rated');
+
+            newReleasesContainer.innerHTML = '';
+            topRatedContainer.innerHTML = '';
+
+            results.forEach(movie => {
+                newReleasesContainer.appendChild(createMovieCard(movie));
+            });
+        }
+
+        initializePage();
+    </script>
+</body>
+</html>
