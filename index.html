@@ -16,9 +16,9 @@
     <header class="bg-gray-800 py-4">
         <div class="container mx-auto px-4">
             <nav class="flex items-center justify-between">
-                <a href="/" class="text-2xl font-bold">King's Movies & TV</a>
+                <a href="index.html" class="text-2xl font-bold">King's Movies & TV</a>
                 <div class="flex items-center space-x-4">
-                    <a href="/" class="hover:text-gray-300">Home</a>
+                    <a href="index.html" class="hover:text-gray-300">Home</a>
                     <a href="movies.html" class="hover:text-gray-300">Movies</a>
                     <a href="tv-shows.html" class="hover:text-gray-300">TV Shows</a>
                     <a href="live-tv.html" class="hover:text-gray-300">Live TV</a>
@@ -29,16 +29,12 @@
     </header>
 
     <main class="container mx-auto px-4 py-8">
+        <h1 class="text-4xl font-bold mb-8">Welcome to King's Movies & TV</h1>
+
         <section class="mb-12">
-            <h1 class="text-4xl font-bold mb-4">Welcome to King's Movies & TV</h1>
-            <p class="text-xl mb-6">Discover and explore your favorite movies and TV shows.</p>
-            <div class="flex max-w-md">
-                <input type="text" placeholder="Search movies or TV shows" class="flex-grow px-4 py-2 rounded-l-md">
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-r-md hover:bg-blue-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-                    </svg>
-                </button>
+            <h2 class="text-2xl font-bold mb-4">Recently Watched</h2>
+            <div id="recently-watched" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                <!-- Recently watched content will be dynamically inserted here -->
             </div>
         </section>
 
@@ -51,7 +47,7 @@
 
         <section>
             <h2 class="text-2xl font-bold mb-4">Popular TV Shows</h2>
-            <div id="popular-tv-shows" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            <div id="popular-shows" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                 <!-- Popular TV shows will be dynamically inserted here -->
             </div>
         </section>
@@ -74,37 +70,57 @@
             return data.results.slice(0, 5);
         }
 
-        async function fetchPopularTVShows() {
+        async function fetchPopularShows() {
             const response = await fetch(`${API_BASE_URL}/tv/popular?api_key=${API_KEY}`);
             const data = await response.json();
             return data.results.slice(0, 5);
         }
 
-        function createMediaCard(item, isMovie = true) {
+        function createContentCard(item, type) {
             const card = document.createElement('div');
             card.className = 'bg-gray-800 rounded-lg overflow-hidden';
             card.innerHTML = `
-                <img src="${IMAGE_BASE_URL}${item.poster_path}" alt="${isMovie ? item.title : item.name}" class="w-full h-auto">
+                <div class="relative">
+                    <img src="${IMAGE_BASE_URL}${item.poster_path}" alt="${item.title || item.name}" class="w-full h-auto">
+                    <a href="${type}-player.html?id=${item.id}&title=${encodeURIComponent(item.title || item.name)}" class="absolute bottom-2 right-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+                        </svg>
+                        Play
+                    </a>
+                </div>
                 <div class="p-4">
-                    <h3 class="font-bold mb-2">${isMovie ? item.title : item.name}</h3>
-                    <p class="text-sm text-gray-400">${new Date(isMovie ? item.release_date : item.first_air_date).getFullYear()}</p>
+                    <h3 class="font-bold mb-2">${item.title || item.name}</h3>
+                    <p class="text-sm text-gray-400 mb-2">${new Date(item.release_date || item.first_air_date).getFullYear()}</p>
+                    <p class="text-sm line-clamp-3">${item.overview}</p>
                 </div>
             `;
             return card;
         }
 
+        function getRecentlyWatched() {
+            const recentlyWatched = JSON.parse(localStorage.getItem('recentlyWatched')) || [];
+            return recentlyWatched.slice(0, 5);
+        }
+
         async function initializePage() {
             const featuredMovies = await fetchFeaturedMovies();
-            const popularTVShows = await fetchPopularTVShows();
+            const popularShows = await fetchPopularShows();
+            const recentlyWatched = getRecentlyWatched();
 
             const featuredMoviesContainer = document.getElementById('featured-movies');
             featuredMovies.forEach(movie => {
-                featuredMoviesContainer.appendChild(createMediaCard(movie));
+                featuredMoviesContainer.appendChild(createContentCard(movie, 'movie'));
             });
 
-            const popularTVShowsContainer = document.getElementById('popular-tv-shows');
-            popularTVShows.forEach(show => {
-                popularTVShowsContainer.appendChild(createMediaCard(show, false));
+            const popularShowsContainer = document.getElementById('popular-shows');
+            popularShows.forEach(show => {
+                popularShowsContainer.appendChild(createContentCard(show, 'tv-show'));
+            });
+
+            const recentlyWatchedContainer = document.getElementById('recently-watched');
+            recentlyWatched.forEach(item => {
+                recentlyWatchedContainer.appendChild(createContentCard(item, item.type));
             });
         }
 
