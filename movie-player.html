@@ -16,9 +16,9 @@
     <header class="bg-gray-800 py-4">
         <div class="container mx-auto px-4">
             <nav class="flex items-center justify-between">
-                <a href="/" class="text-2xl font-bold">King's Movies & TV</a>
+                <a href="index.html" class="text-2xl font-bold">King's Movies & TV</a>
                 <div class="flex items-center space-x-4">
-                    <a href="/" class="hover:text-gray-300">Home</a>
+                    <a href="index.html" class="hover:text-gray-300">Home</a>
                     <a href="movies.html" class="hover:text-gray-300">Movies</a>
                     <a href="tv-shows.html" class="hover:text-gray-300">TV Shows</a>
                     <a href="live-tv.html" class="hover:text-gray-300">Live TV</a>
@@ -29,20 +29,20 @@
     </header>
 
     <main class="container mx-auto px-4 py-8">
-       <div id="player-container" class="w-full max-w-6xl mx-auto bg-gray-800 rounded-lg overflow-hidden">
-    <div class="p-4 flex items-center justify-between">
-        <a href="#" id="back-link" class="flex items-center text-gray-300 hover:text-white">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
-            </svg>
-            Back to Movies
-        </a>
-        <h2 id="movie-title" class="text-xl font-bold"></h2>
-    </div>
-    <div id="player" class="bg-black" style="height: 80vh;">
-        <!-- Player iframe will be inserted here -->
-    </div>
-</div>
+        <div id="player-container" class="w-full max-w-4xl mx-auto bg-gray-800 rounded-lg overflow-hidden">
+            <div class="p-4 flex items-center justify-between">
+                <a href="#" id="back-link" class="flex items-center text-gray-300 hover:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                    </svg>
+                    Back to Movies
+                </a>
+                <h2 id="movie-title" class="text-xl font-bold"></h2>
+            </div>
+            <div id="player" class="aspect-w-16 aspect-h-9 bg-black">
+                <!-- Player iframe will be inserted here -->
+            </div>
+        </div>
     </main>
 
     <footer class="bg-gray-800 py-6 mt-12">
@@ -61,12 +61,33 @@
 
         function loadPlayer(embedUrl) {
             const player = document.getElementById('player');
+            
             player.innerHTML = `<iframe src="${embedUrl}" allowfullscreen class="w-full h-full"></iframe>`;
+        }
+
+        function saveToRecentlyWatched(movie) {
+            let recentlyWatched = JSON.parse(localStorage.getItem('recentlyWatched')) || [];
+            const existingIndex = recentlyWatched.findIndex(item => item.id === movie.id && item.type === 'movie');
+            
+            if (existingIndex !== -1) {
+                recentlyWatched.splice(existingIndex, 1);
+            }
+            
+            recentlyWatched.unshift(movie);
+            recentlyWatched = recentlyWatched.slice(0, 10); // Keep only the 10 most recent items
+            localStorage.setItem('recentlyWatched', JSON.stringify(recentlyWatched));
         }
 
         function initializePlayer() {
             const embedUrl = `https://player.vidsrc.nl/embed/movie/${movieId}`;
             loadPlayer(embedUrl);
+
+            // Save to recently watched
+            saveToRecentlyWatched({
+                id: movieId,
+                title: movieTitle,
+                type: 'movie'
+            });
         }
 
         initializePlayer();
