@@ -77,7 +77,7 @@
     <script>
         const API_KEY = '5cfb2e9e20ae09fcd4f2d57501bc6238';
         const API_BASE_URL = 'https://api.themoviedb.org/3';
-        const PLAYER_BASE_URL = 'https://player.vidsrc.nl/embed/tv';
+        const PLAYER_BASE_URL = 'https://muvsrc.ru/embed/tv/';
 
         const urlParams = new URLSearchParams(window.location.search);
         const showId = urlParams.get('id');
@@ -139,7 +139,7 @@
             currentEpisode = episodeNumber;
             document.getElementById('season-number').textContent = seasonNumber;
             document.getElementById('episode-number').textContent = episodeNumber;
-            const embedUrl = `https://player.vidsrc.nl/embed/tv/${showId}/${seasonNumber}/${episodeNumber}?server=Upstream`;
+            const embedUrl = `https://muvsrc.ru/embed/tv/{tmdb_id}/{season_number}/{episode_number}?server=Upstream`;
             loadPlayer(embedUrl);
 
             // Save to recently watched
