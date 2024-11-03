@@ -50,7 +50,7 @@
     </footer>
 
     <script>
-    const channels = [
+        const channels = [
     {
         id: "ABCNews[USA]",
         name: "ABC News",
@@ -382,6 +382,22 @@
             );
         }
 
+
+        function displayChannels(channelsToDisplay) {
+            const channelGrid = document.getElementById('channel-grid');
+            channelGrid.innerHTML = '';
+            channelsToDisplay.forEach(channel => {
+                channelGrid.appendChild(createChannelCard(channel));
+            });
+        }
+
+        function searchChannels(query) {
+            return channels.filter(channel => 
+                channel.name.toLowerCase().includes(query.toLowerCase()) ||
+                channel.description.toLowerCase().includes(query.toLowerCase())
+            );
+        }
+
         const searchForm = document.getElementById('search-form');
         const searchInput = document.getElementById('search-input');
 
@@ -395,6 +411,12 @@
                 displayChannels(channels);
             }
         });
+
+        // Initial display of all channels
+        displayChannels(channels);
+    </script>
+</body>
+</html>
 
         // Initial display of all channels
         displayChannels(channels);
