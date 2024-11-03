@@ -29,30 +29,31 @@
     </header>
 
     <main class="container mx-auto px-4 py-8">
-    <div id="player-container" class="w-full max-w-6xl mx-auto bg-gray-800 rounded-lg overflow-hidden">
-        <div class="p-4 flex items-center justify-between">
-            <a href="#" id="back-link" class="flex items-center text-gray-300 hover:text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
-                </svg>
-                Back to Movies
-            </a>
-            <h2 id="movie-title" class="text-xl font-bold"></h2>
-        </div>
-        <div class="p-4 bg-gray-700">
+        <div id="player-container" class="w-full max-w-6xl mx-auto bg-gray-800 rounded-lg overflow-hidden">
+            <div class="p-4 flex items-center justify-between">
+                <a href="#" id="back-link" class="flex items-center text-gray-300 hover:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                    </svg>
+                    Back to Movies
+                </a>
+                <h2 id="movie-title" class="text-xl font-bold"></h2>
+            </div>
+            <div class="p-4 bg-gray-700">
                 <label for="server-select" class="mr-2">Select Server:</label>
                 <select id="server-select" class="bg-gray-800 text-white px-2 py-1 rounded">
                     <option value="vidsrc">VidSrc (player.vidsrc.nl)</option>
                     <option value="muvsrc">MuvSrc (muvsrc.ru)</option>
                     <option value="filmxy">FilmXY (filmxy.vip)</option>
                     <option value="2embed">2Embed (2embed.stream)</option>
-            </select>
+                </select>
+            </div>
+            <div class="relative w-full" style="padding-top: 56.25%;">
+                <div id="player" class="absolute top-0 left-0 w-full h-full bg-black">
+                    <!-- Player iframe will be inserted here -->
+                </div>
+            </div>
         </div>
-        <div id="player" class="bg-black" style="height: 85vh;">
-            <!-- Player iframe will be inserted here -->
-        </div>
-    </div>
-</main>
     </main>
 
     <footer class="bg-gray-800 py-6 mt-12">
@@ -81,7 +82,9 @@
 
         const servers = {
             vidsrc: 'https://player.vidsrc.nl/embed/movie',
-            muvsrc: 'https://muvsrc.ru/embed/movie'
+            muvsrc: 'https://muvsrc.ru/embed/movie',
+            filmxy: 'https://www.filmxy.vip/movie',
+            '2embed': 'https://www.2embed.stream/embed/movie'
         };
 
         function loadPlayer(server) {
