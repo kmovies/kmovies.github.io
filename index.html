@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>King's Movies & TV</title>
+    <title>Movie Player - King's Movies & TV</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -29,28 +29,31 @@
     </header>
 
     <main class="container mx-auto px-4 py-8">
-        <h1 class="text-4xl font-bold mb-8">Welcome to King's Movies & TV</h1>
-
-        <section class="mb-12">
-            <h2 class="text-2xl font-bold mb-4">Recently Watched</h2>
-            <div id="recently-watched" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                <!-- Recently watched content will be dynamically inserted here -->
+        <div id="player-container" class="w-full max-w-6xl mx-auto bg-gray-800 rounded-lg overflow-hidden">
+            <div class="p-4 flex items-center justify-between">
+                <a href="#" id="back-link" class="flex items-center text-gray-300 hover:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                    </svg>
+                    Back to Movies
+                </a>
+                <h2 id="movie-title" class="text-xl font-bold"></h2>
             </div>
-        </section>
-
-        <section class="mb-12">
-            <h2 class="text-2xl font-bold mb-4">Featured Movies</h2>
-            <div id="featured-movies" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                <!-- Featured movies will be dynamically inserted here -->
+            <div class="p-4 bg-gray-700">
+                <label for="server-select" class="mr-2">Select Server:</label>
+                <select id="server-select" class="bg-gray-800 text-white px-2 py-1 rounded">
+                    <option value="vidsrc">VidSrc (player.vidsrc.nl)</option>
+                    <option value="muvsrc">MuvSrc (muvsrc.ru)</option>
+                    <option value="filmxy">FilmXY (filmxy.vip)</option>
+                    <option value="2embed">2Embed (2embed.stream)</option>
+                </select>
             </div>
-        </section>
-
-        <section>
-            <h2 class="text-2xl font-bold mb-4">Popular TV Shows</h2>
-            <div id="popular-shows" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                <!-- Popular TV shows will be dynamically inserted here -->
+            <div class="relative w-full" style="padding-top: 56.25%;">
+                <div id="player" class="absolute top-0 left-0 w-full h-full bg-black">
+                    <!-- Player iframe will be inserted here -->
+                </div>
             </div>
-        </section>
+        </div>
     </main>
 
     <footer class="bg-gray-800 py-6 mt-12">
@@ -59,131 +62,82 @@
         </div>
     </footer>
 
-    <!-- Pop-up message -->
-    <div id="popup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div id="ad-warning" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
         <div class="bg-gray-800 p-6 rounded-lg max-w-md">
-            <h3 class="text-xl font-bold mb-4">Welcome to King's Movies & TV</h3>
-            <p class="mb-4">Enjoy a wide selection of movies, TV shows, and live TV channels. For the best experience, consider using an ad blocker.</p>
+            <h3 class="text-xl font-bold mb-4">Too Many Ads?</h3>
+            <p class="mb-4">If you're experiencing too many ads or pop-ups, please consider using an ad blocker or try changing the server.</p>
             <div class="flex justify-end">
-                <button id="close-popup" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Got it</button>
+                <button id="close-ad-warning" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Got it</button>
             </div>
         </div>
     </div>
 
     <script>
-        const API_KEY = '5cfb2e9e20ae09fcd4f2d57501bc6238';
-        const API_BASE_URL = 'https://api.themoviedb.org/3';
-        const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
+        const urlParams = new URLSearchParams(window.location.search);
+        const movieId = urlParams.get('id');
+        const movieTitle = urlParams.get('title');
 
-        async function fetchFeaturedMovies() {
-            const response = await fetch(`${API_BASE_URL}/movie/popular?api_key=${API_KEY}`);
-            const data = await response.json();
-            return data.results.slice(0, 5);
+        document.getElementById('movie-title').textContent = movieTitle;
+        document.getElementById('back-link').href = 'movies.html';
+
+        const servers = {
+            vidsrc: 'https://player.vidsrc.nl/embed/movie',
+            muvsrc: 'https://muvsrc.ru/embed/movie',
+            filmxy: 'https://www.filmxy.vip/movie',
+            '2embed': 'https://www.2embed.stream/embed/movie'
+        };
+
+        function loadPlayer(server) {
+            const player = document.getElementById('player');
+            const embedUrl = `${servers[server]}/${movieId}`;
+            player.innerHTML = `<iframe src="${embedUrl}" allowfullscreen class="w-full h-full"></iframe>`;
         }
 
-        async function fetchPopularShows() {
-            const response = await fetch(`${API_BASE_URL}/tv/popular?api_key=${API_KEY}`);
-            const data = await response.json();
-            return data.results.slice(0, 5);
-        }
-
-        async function fetchItemDetails(id, type) {
-            const response = await fetch(`${API_BASE_URL}/${type}/${id}?api_key=${API_KEY}`);
-            return await response.json();
-        }
-
-        function createContentCard(item, type) {
-            const card = document.createElement('div');
-            card.className = 'bg-gray-800 rounded-lg overflow-hidden';
-            card.innerHTML = `
-                <div class="relative">
-                    <img src="${IMAGE_BASE_URL}${item.poster_path}" alt="${item.title || item.name}" class="w-full h-auto">
-                    <a href="${type}-player.html?id=${item.id}&title=${encodeURIComponent(item.title || item.name)}" class="absolute bottom-2 right-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
-                        </svg>
-                        Play
-                    </a>
-                </div>
-                <div class="p-4">
-                    <h3 class="font-bold mb-2">${item.title || item.name}</h3>
-                    <p class="text-sm text-gray-400 mb-2">${new Date(item.release_date || item.first_air_date).getFullYear()}</p>
-                    <p class="text-sm line-clamp-3">${item.overview}</p>
-                </div>
-            `;
-            return card;
-        }
-
-        function getRecentlyWatched() {
-            return JSON.parse(localStorage.getItem('recentlyWatched')) || [];
-        }
-
-        async function createRecentlyWatchedCard(item) {
-            let details;
-            if (item.type === 'movie' || item.type === 'tv') {
-                details = await fetchItemDetails(item.id, item.type);
-            } else {
-                // For live TV, we don't have TMDB data, so we'll use a placeholder
-                details = {
-                    poster_path: '/placeholder.svg?height=750&width=500',
-                    name: item.title,
-                    first_air_date: new Date().toISOString(),
-                    overview: 'Live TV Channel'
-                };
+        function saveToRecentlyWatched(movie) {
+            let recentlyWatched = JSON.parse(localStorage.getItem('recentlyWatched')) || [];
+            const existingIndex = recentlyWatched.findIndex(item => item.id === movie.id && item.type === 'movie');
+            
+            if (existingIndex !== -1) {
+                recentlyWatched.splice(existingIndex, 1);
             }
-
-            const card = document.createElement('div');
-            card.className = 'bg-gray-800 rounded-lg overflow-hidden';
-            card.innerHTML = `
-                <div class="relative">
-                    <img src="${IMAGE_BASE_URL}${details.poster_path}" alt="${details.title || details.name}" class="w-full h-auto">
-                    <a href="${item.type}-player.html?id=${item.id}&title=${encodeURIComponent(item.title)}" class="absolute bottom-2 right-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
-                        </svg>
-                        Play
-                    </a>
-                </div>
-                <div class="p-4">
-                    <h3 class="font-bold mb-2">${details.title || details.name}</h3>
-                    <p class="text-sm text-gray-400 mb-2">${item.type === 'tv' ? `S${item.season} E${item.episode}` : ''}</p>
-                    <p class="text-sm line-clamp-3">${details.overview}</p>
-                </div>
-            `;
-            return card;
+            
+            recentlyWatched.unshift(movie);
+            recentlyWatched = recentlyWatched.slice(0, 10); // Keep only the 10 most recent items
+            localStorage.setItem('recentlyWatched', JSON.stringify(recentlyWatched));
         }
 
-        async function initializePage() {
-            const featuredMovies = await fetchFeaturedMovies();
-            const popularShows = await fetchPopularShows();
-            const recentlyWatched = getRecentlyWatched();
+        function initializePlayer() {
+            loadPlayer('vidsrc'); // Default to VidSrc
 
-            const featuredMoviesContainer = document.getElementById('featured-movies');
-            featuredMovies.forEach(movie => {
-                featuredMoviesContainer.appendChild(createContentCard(movie, 'movie'));
+            // Save to recently watched
+            saveToRecentlyWatched({
+                id: movieId,
+                title: movieTitle,
+                type: 'movie'
             });
-
-            const popularShowsContainer = document.getElementById('popular-shows');
-            popularShows.forEach(show => {
-                popularShowsContainer.appendChild(createContentCard(show, 'tv-show'));
-            });
-
-            const recentlyWatchedContainer = document.getElementById('recently-watched');
-            for (const item of recentlyWatched) {
-                const card = await createRecentlyWatchedCard(item);
-                recentlyWatchedContainer.appendChild(card);
-            }
-
-            // Show the pop-up
-            document.getElementById('popup').classList.remove('hidden');
         }
 
-        // Close the pop-up when the "Got it" button is clicked
-        document.getElementById('close-popup').addEventListener('click', function() {
-            document.getElementById('popup').classList.add('hidden');
+        document.getElementById('server-select').addEventListener('change', function() {
+            loadPlayer(this.value);
         });
 
-        initializePage();
+        let adWarningShown = false;
+
+        function showAdWarning() {
+            if (!adWarningShown) {
+                document.getElementById('ad-warning').classList.remove('hidden');
+                adWarningShown = true;
+            }
+        }
+
+        document.getElementById('close-ad-warning').addEventListener('click', function() {
+            document.getElementById('ad-warning').classList.add('hidden');
+        });
+
+        // Show ad warning after 10 seconds
+        setTimeout(showAdWarning, 10000);
+
+        initializePlayer();
     </script>
 </body>
 </html>
