@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>King's Movies & TV</title>
+    <title>About - King's Movies & TV</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -16,9 +16,9 @@
     <header class="bg-gray-800 py-4">
         <div class="container mx-auto px-4">
             <nav class="flex items-center justify-between">
-                <a href="index.html" class="text-2xl font-bold">King's Movies & TV</a>
+                <a href="/" class="text-2xl font-bold">King's Movies & TV</a>
                 <div class="flex items-center space-x-4">
-                    <a href="index.html" class="hover:text-gray-300">Home</a>
+                    <a href="/" class="hover:text-gray-300">Home</a>
                     <a href="movies.html" class="hover:text-gray-300">Movies</a>
                     <a href="tv-shows.html" class="hover:text-gray-300">TV Shows</a>
                     <a href="live-tv.html" class="hover:text-gray-300">Live TV</a>
@@ -29,28 +29,47 @@
     </header>
 
     <main class="container mx-auto px-4 py-8">
-        <h1 class="text-4xl font-bold mb-8">Welcome to King's Movies & TV</h1>
-
-        <section class="mb-12">
-            <h2 class="text-2xl font-bold mb-4">Recently Watched</h2>
-            <div id="recently-watched" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                <!-- Recently watched content will be dynamically inserted here -->
+        <h1 class="text-4xl font-bold mb-8">About King's Movies & TV</h1>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+                <h2 class="text-2xl font-bold mb-4">Our Story</h2>
+                <p class="text-gray-300 mb-4">
+                    King's Movies & TV was founded in 2023 with a simple mission: to bring the best of entertainment to your screens. We believe that everyone deserves access to high-quality movies, TV shows, and live content from around the world.
+                </p>
+                <p class="text-gray-300 mb-4">
+                    Our team of passionate movie buffs and tech enthusiasts work tirelessly to curate an extensive library of content and develop innovative features to enhance your viewing experience.
+                </p>
             </div>
-        </section>
-
-        <section class="mb-12">
-            <h2 class="text-2xl font-bold mb-4">Featured Movies</h2>
-            <div id="featured-movies" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                <!-- Featured movies will be dynamically inserted here -->
+            <div>
+                <h2 class="text-2xl font-bold mb-4">Our Vision</h2>
+                <p class="text-gray-300 mb-4">
+                    We envision a world where entertainment knows no boundaries. Our goal is to become the go-to platform for all your entertainment needs, offering a diverse range of content that caters to all tastes and preferences.
+                </p>
+                <p class="text-gray-300 mb-4">
+                    We're committed to continually improving our service, introducing new features, and expanding our content library to ensure that you always have something exciting to watch.
+                </p>
             </div>
-        </section>
-
-        <section>
-            <h2 class="text-2xl font-bold mb-4">Popular TV Shows</h2>
-            <div id="popular-shows" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                <!-- Popular TV shows will be dynamically inserted here -->
+        </div>
+        <div class="mt-12">
+            <h2 class="text-2xl font-bold mb-4">Meet Our Team</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-gray-800 rounded-lg p-4 text-center">
+                    <img src="/placeholder.svg?height=150&width=150" alt="2.hidden.0" class="w-32 h-32 rounded-full mx-auto mb-4">
+                    <h3 class="text-xl font-bold mb-2">John Doe</h3>
+                    <p class="text-gray-400">Creator/Owner/p>
+                </div>
+                <div class="bg-gray-800 rounded-lg p-4 text-center">
+                    <img src="/placeholder.svg?height=150&width=150" alt="Josh Athwal" class="w-32 h-32 rounded-full mx-auto mb-4">
+                    <h3 class="text-xl font-bold mb-2">Josh Athwal</h3>
+                    <p class="text-gray-400">Graphics designer</p>
+                </div>
+                <div class="bg-gray-800 rounded-lg p-4 text-center">
+                    <img src="/placeholder.svg?height=150&width=150" alt="Some Nigga" class="w-32 h-32 rounded-full mx-auto mb-4">
+                    <h3 class="text-xl font-bold mb-2">Some Nigga</h3>
+                    <p class="text-gray-400">Helped deign</p>
+                </div>
             </div>
-        </section>
+        </div>
     </main>
 
     <footer class="bg-gray-800 py-6 mt-12">
@@ -58,73 +77,5 @@
             <p>&copy; 2023 King's Movies & TV. All rights reserved.</p>
         </div>
     </footer>
-
-    <script>
-        const API_KEY = '5cfb2e9e20ae09fcd4f2d57501bc6238';
-        const API_BASE_URL = 'https://api.themoviedb.org/3';
-        const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
-
-        async function fetchFeaturedMovies() {
-            const response = await fetch(`${API_BASE_URL}/movie/popular?api_key=${API_KEY}`);
-            const data = await response.json();
-            return data.results.slice(0, 5);
-        }
-
-        async function fetchPopularShows() {
-            const response = await fetch(`${API_BASE_URL}/tv/popular?api_key=${API_KEY}`);
-            const data = await response.json();
-            return data.results.slice(0, 5);
-        }
-
-        function createContentCard(item, type) {
-            const card = document.createElement('div');
-            card.className = 'bg-gray-800 rounded-lg overflow-hidden';
-            card.innerHTML = `
-                <div class="relative">
-                    <img src="${IMAGE_BASE_URL}${item.poster_path}" alt="${item.title || item.name}" class="w-full h-auto">
-                    <a href="${type}-player.html?id=${item.id}&title=${encodeURIComponent(item.title || item.name)}" class="absolute bottom-2 right-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
-                        </svg>
-                        Play
-                    </a>
-                </div>
-                <div class="p-4">
-                    <h3 class="font-bold mb-2">${item.title || item.name}</h3>
-                    <p class="text-sm text-gray-400 mb-2">${new Date(item.release_date || item.first_air_date).getFullYear()}</p>
-                    <p class="text-sm line-clamp-3">${item.overview}</p>
-                </div>
-            `;
-            return card;
-        }
-
-        function getRecentlyWatched() {
-            const recentlyWatched = JSON.parse(localStorage.getItem('recentlyWatched')) || [];
-            return recentlyWatched.slice(0, 5);
-        }
-
-        async function initializePage() {
-            const featuredMovies = await fetchFeaturedMovies();
-            const popularShows = await fetchPopularShows();
-            const recentlyWatched = getRecentlyWatched();
-
-            const featuredMoviesContainer = document.getElementById('featured-movies');
-            featuredMovies.forEach(movie => {
-                featuredMoviesContainer.appendChild(createContentCard(movie, 'movie'));
-            });
-
-            const popularShowsContainer = document.getElementById('popular-shows');
-            popularShows.forEach(show => {
-                popularShowsContainer.appendChild(createContentCard(show, 'tv-show'));
-            });
-
-            const recentlyWatchedContainer = document.getElementById('recently-watched');
-            recentlyWatched.forEach(item => {
-                recentlyWatchedContainer.appendChild(createContentCard(item, item.type));
-            });
-        }
-
-        initializePage();
-    </script>
 </body>
 </html>
