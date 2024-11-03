@@ -30,19 +30,21 @@
 
     <main class="container mx-auto px-4 py-8">
         <div id="player-container" class="w-full max-w-6xl mx-auto bg-gray-800 rounded-lg overflow-hidden">
-    <div class="p-4 flex items-center justify-between">
-        <a href="live-tv.html" class="flex items-center text-gray-300 hover:text-white">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
-            </svg>
-            Back to Live TV
-        </a>
-        <h2 id="channel-name" class="text-xl font-bold"></h2>
-    </div>
-    <div id="player" class="bg-black" style="height: 75vh;">
-        <!-- Player iframe will be inserted here -->
-    </div>
-</div>
+            <div class="p-4 flex items-center justify-between">
+                <a href="live-tv.html" class="flex items-center text-gray-300 hover:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                    </svg>
+                    Back to Live TV
+                </a>
+                <h2 id="channel-name" class="text-xl font-bold"></h2>
+            </div>
+            <div class="relative w-full" style="padding-top: 56.25%;">
+                <div id="player" class="absolute top-0 left-0 w-full h-full bg-black">
+                    <!-- Player iframe will be inserted here -->
+                </div>
+            </div>
+        </div>
     </main>
 
     <footer class="bg-gray-800 py-6 mt-12">
@@ -51,23 +53,41 @@
         </div>
     </footer>
 
+    <div id="ad-warning" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-gray-800 p-6 rounded-lg max-w-md">
+            <h3 class="text-xl font-bold mb-4">Too Many Ads?</h3>
+            <p class="mb-4">If you're experiencing too many ads or pop-ups, please consider using an ad blocker.</p>
+            <div class="flex justify-end">
+                <button id="close-ad-warning" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Got it</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        const PLAYER_BASE_URL = 'https://topembed.pw/channel/';
-        
         const urlParams = new URLSearchParams(window.location.search);
         const channelId = urlParams.get('id');
         const channelName = urlParams.get('name');
 
         document.getElementById('channel-name').textContent = channelName;
 
-        function loadPlayer(embedUrl) {
+        const channels = {
+            cnn: 'https://example.com/cnn-stream',
+            espn: 'https://example.com/espn-stream',
+            mtv: 'https://example.com/mtv-stream',
+            discovery: 'https://example.com/discovery-stream',
+            nickelodeon: 'https://example.com/nickelodeon-stream',
+            hbo: 'https://example.com/hbo-stream'
+        };
+
+        function loadPlayer(channelId) {
             const player = document.getElementById('player');
+            const embedUrl = channels[channelId];
             player.innerHTML = `<iframe src="${embedUrl}" allowfullscreen class="w-full h-full"></iframe>`;
         }
 
         function saveToRecentlyWatched(channel) {
             let recentlyWatched = JSON.parse(localStorage.getItem('recentlyWatched')) || [];
-            const existingIndex = recentlyWatched.findIndex(item => item.id === channel.id && item.type === 'live');
+            const existingIndex = recentlyWatched.findIndex(item => item.id === channel.id && item.type === 'live-tv');
             
             if (existingIndex !== -1) {
                 recentlyWatched.splice(existingIndex, 1);
@@ -79,22 +99,15 @@
         }
 
         function initializePlayer() {
-            if (channelId) {
-                const embedUrl = `${PLAYER_BASE_URL}${channelId}`;
-                loadPlayer(embedUrl);
+            loadPlayer(channelId);
 
-                // Save to recently watched
-                saveToRecentlyWatched({
-                    id: channelId,
-                    title: channelName,
-                    type: 'live'
-                });
-            } else {
-                document.getElementById('player').innerHTML = '<p class="text-center p-4">Channel not found</p>';
-            }
+            // Save to recently watched
+            saveToRecentlyWatched({
+                id: channelId,
+                title: channelName,
+                type: 'live-tv'
+            });
         }
-
-        initializePlayer();
 
         let adWarningShown = false;
 
@@ -111,15 +124,8 @@
 
         // Show ad warning after 10 seconds
         setTimeout(showAdWarning, 10000);
+
+        initializePlayer();
     </script>
-    <div id="ad-warning" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-        <div class="bg-gray-800 p-6 rounded-lg max-w-md">
-            <h3 class="text-xl font-bold mb-4">Experiencing Ads?</h3>
-            <p class="mb-4">For live TV, using an ad blocker is the only way to remove ads. Consider installing one for a better viewing experience.</p>
-            <div class="flex justify-end">
-                <button id="close-ad-warning" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Got it</button>
-            </div>
-        </div>
-    </div>
 </body>
 </html>
