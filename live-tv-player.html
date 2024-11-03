@@ -70,18 +70,11 @@
 
         document.getElementById('channel-name').textContent = channelName;
 
-        const channels = {
-            cnn: 'https://example.com/cnn-stream',
-            espn: 'https://example.com/espn-stream',
-            mtv: 'https://example.com/mtv-stream',
-            discovery: 'https://example.com/discovery-stream',
-            nickelodeon: 'https://example.com/nickelodeon-stream',
-            hbo: 'https://example.com/hbo-stream'
-        };
+        const API_BASE_URL = 'https://topembed.pw/channel/';
 
         function loadPlayer(channelId) {
             const player = document.getElementById('player');
-            const embedUrl = channels[channelId];
+            const embedUrl = `${API_BASE_URL}${channelId}`;
             player.innerHTML = `<iframe src="${embedUrl}" allowfullscreen class="w-full h-full"></iframe>`;
         }
 
