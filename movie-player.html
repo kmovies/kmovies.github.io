@@ -39,6 +39,7 @@
                 </a>
                 <h2 id="movie-title" class="text-xl font-bold"></h2>
             </div>
+
             <div class="p-4 bg-gray-700">
                 <label for="server-select" class="mr-2">Select Server:</label>
                 <select id="server-select" class="bg-gray-800 text-white px-2 py-1 rounded">
@@ -49,6 +50,7 @@
                     <option value="vidsrc2">Vidsrc2 (vidsrc.xyz)</option>
                 </select>
             </div>
+
             <div class="relative w-full" style="padding-top: 56.25%;">
                 <div id="player" class="absolute top-0 left-0 w-full h-full bg-black">
                     <!-- Player iframe will be inserted here -->
@@ -85,8 +87,8 @@
             vidsrc: 'https://player.vidsrc.nl/embed/movie',
             muvsrc: 'https://muvsrc.ru/embed/movie',
             filmxy: 'https://www.filmxy.vip/movie',
-            '2embed': 'https://www.2embed.stream/embed/movie'
-            'vidsrc2': 'https://vidsrc.xyz/embed/movie'
+            '2embed': 'https://www.2embed.stream/embed/movie',
+            vidsrc2: 'https://vidsrc.xyz/embed/movie'
         };
 
         function loadPlayer(server) {
@@ -98,25 +100,17 @@
         function saveToRecentlyWatched(movie) {
             let recentlyWatched = JSON.parse(localStorage.getItem('recentlyWatched')) || [];
             const existingIndex = recentlyWatched.findIndex(item => item.id === movie.id && item.type === 'movie');
-            
             if (existingIndex !== -1) {
                 recentlyWatched.splice(existingIndex, 1);
             }
-            
             recentlyWatched.unshift(movie);
             recentlyWatched = recentlyWatched.slice(0, 10); // Keep only the 10 most recent items
             localStorage.setItem('recentlyWatched', JSON.stringify(recentlyWatched));
         }
 
         function initializePlayer() {
-            loadPlayer('vidsrc2'); // Default to VidSrc
-
-            // Save to recently watched
-            saveToRecentlyWatched({
-                id: movieId,
-                title: movieTitle,
-                type: 'movie'
-            });
+            loadPlayer('vidsrc2'); // Default to VidSrc2 server
+            saveToRecentlyWatched({ id: movieId, title: movieTitle, type: 'movie' });
         }
 
         document.getElementById('server-select').addEventListener('change', function() {
@@ -124,7 +118,6 @@
         });
 
         let adWarningShown = false;
-
         function showAdWarning() {
             if (!adWarningShown) {
                 document.getElementById('ad-warning').classList.remove('hidden');
@@ -139,6 +132,7 @@
         // Show ad warning after 10 seconds
         setTimeout(showAdWarning, 10000);
 
+        // Initialize player and show details
         initializePlayer();
     </script>
 </body>
