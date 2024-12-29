@@ -29,41 +29,43 @@
     </header>
 
     <main class="container mx-auto px-4 py-8">
-    <div id="player-container" class="w-full max-w-6xl mx-auto bg-gray-800 rounded-lg overflow-hidden">
-        <div class="p-4 flex items-center justify-between">
-            <a href="#" id="back-link" class="flex items-center text-gray-300 hover:text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
-                </svg>
-                Back to TV Shows
-            </a>
-            <h2 id="show-title" class="text-xl font-bold"></h2>
-        </div>
-        <div class="p-4 bg-gray-700">
+        <div id="player-container" class="w-full max-w-6xl mx-auto bg-gray-800 rounded-lg overflow-hidden">
+            <div class="p-4 flex items-center justify-between">
+                <a href="#" id="back-link" class="flex items-center text-gray-300 hover:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                    </svg>
+                    Back to TV Shows
+                </a>
+                <h2 id="show-title" class="text-xl font-bold"></h2>
+            </div>
+
+            <div class="p-4 bg-gray-700">
                 <label for="server-select" class="mr-2">Select Server:</label>
                 <select id="server-select" class="bg-gray-800 text-white px-2 py-1 rounded">
-                    <option value="vidsrc">VidSrc (player.vidsrc.nl)</option>
-                    <option value="muvsrc">MuvSrc (muvsrc.ru)</option>
-                    <option value="filmxy">FilmXY (filmxy.vip)</option>
-                    <option value="2embed">2Embed (2embed.stream)</option>
+                    <!-- Server options will be dynamically populated here -->
                 </select>
-        </div>
-        <div id="player" class="bg-black" style="height: 85vh;">
-            <!-- Player iframe will be inserted here -->
-        </div>
-        <div id="episode-info" class="p-4">
-            <p class="text-lg">Season <span id="season-number"></span>, Episode <span id="episode-number"></span></p>
-        </div>
-        <div id="episode-list" class="p-4">
-            <h3 class="text-lg font-bold mb-2">Episodes</h3>
-            <div id="season-buttons" class="flex flex-wrap gap-2 mb-4">
-                <!-- Season buttons will be dynamically inserted here -->
+
+                <!-- Display list of servers with "Remove" buttons -->
+                <div id="server-list" class="mt-4">
+                    <!-- Server remove buttons will be dynamically populated here -->
+                </div>
             </div>
-            <div id="episode-buttons" class="grid grid-cols-5 gap-2">
-                <!-- Episode buttons will be dynamically inserted here -->
+
+            <div id="player" class="bg-black" style="height: 85vh;">
+                <!-- Player iframe will be inserted here -->
+            </div>
+
+            <div id="episode-info" class="p-4">
+                <p class="text-lg">Season <span id="season-number"></span>, Episode <span id="episode-number"></span></p>
+            </div>
+
+            <div id="episode-list" class="p-4">
+                <h3 class="text-lg font-bold mb-2">Episodes</h3>
+                <div id="season-buttons" class="flex flex-wrap gap-2 mb-4"></div>
+                <div id="episode-buttons" class="grid grid-cols-5 gap-2"></div>
             </div>
         </div>
-</div>
     </main>
 
     <footer class="bg-gray-800 py-6 mt-12">
@@ -95,11 +97,61 @@
         document.getElementById('show-title').textContent = showTitle;
         document.getElementById('back-link').href = `tv-shows.html`;
 
-        const servers = {
+        // Load servers from localStorage or use default servers
+        let servers = JSON.parse(localStorage.getItem('servers')) || {
             vidsrc: 'https://player.vidsrc.nl/embed/tv',
             muvsrc: 'https://muvsrc.ru/embed/tv',
-            vidsrc2: 'https://vidsrc.xyz/embed/tv'  // Added VidSrc 2
+            vidsrc2: 'https://vidsrc.xyz/embed/tv'
         };
+
+        // Populate the server dropdown and the server list
+        function populateServerDropdown() {
+            const serverSelect = document.getElementById('server-select');
+            serverSelect.innerHTML = ''; // Clear existing options
+            for (const [key, value] of Object.entries(servers)) {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = key;
+                serverSelect.appendChild(option);
+            }
+        }
+
+        // Display list of servers with remove buttons
+        function populateServerList() {
+            const serverList = document.getElementById('server-list');
+            serverList.innerHTML = ''; // Clear existing server list
+            for (const [key, value] of Object.entries(servers)) {
+                const serverItem = document.createElement('div');
+                serverItem.classList.add('flex', 'items-center', 'mb-2');
+                
+                const serverName = document.createElement('span');
+                serverName.textContent = key + " (" + value + ")";
+                serverName.classList.add('text-white', 'mr-2');
+                
+                const removeButton = document.createElement('button');
+                removeButton.textContent = 'Remove';
+                removeButton.classList.add('bg-red-500', 'text-white', 'px-2', 'py-1', 'ml-2', 'rounded');
+                removeButton.onclick = () => removeServer(key);
+
+                serverItem.appendChild(serverName);
+                serverItem.appendChild(removeButton);
+                serverList.appendChild(serverItem);
+            }
+        }
+
+        // Function to remove a server
+        function removeServer(serverKey) {
+            delete servers[serverKey];
+            localStorage.setItem('servers', JSON.stringify(servers));
+            populateServerDropdown();  // Re-populate the dropdown
+            populateServerList();  // Re-populate the server list
+        }
+
+        function loadPlayer(server, seasonNumber, episodeNumber) {
+            const player = document.getElementById('player');
+            const embedUrl = `${servers[server]}/${showId}/${seasonNumber}/${episodeNumber}`;
+            player.innerHTML = `<iframe src="${embedUrl}" allowfullscreen class="w-full h-full"></iframe>`;
+        }
 
         async function fetchTVShowDetails() {
             const response = await fetch(`${API_BASE_URL}/tv/${showId}?api_key=${API_KEY}`);
@@ -129,16 +181,10 @@
             episodes.forEach(episode => {
                 const button = document.createElement('button');
                 button.textContent = episode.episode_number;
-                button.className = 'bg-blue-500 text-white  px-3 py-1 rounded hover:bg-blue-600';
+                button.className = 'bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600';
                 button.onclick = () => loadEpisode(currentSeason, episode.episode_number);
                 episodeButtons.appendChild(button);
             });
-        }
-
-        function loadPlayer(server, seasonNumber, episodeNumber) {
-            const player = document.getElementById('player');
-            const embedUrl = `${servers[server]}/${showId}/${seasonNumber}/${episodeNumber}`;
-            player.innerHTML = `<iframe src="${embedUrl}" allowfullscreen class="w-full h-full"></iframe>`;
         }
 
         async function loadSeason(seasonNumber) {
@@ -155,28 +201,6 @@
             document.getElementById('episode-number').textContent = episodeNumber;
             const server = document.getElementById('server-select').value;
             loadPlayer(server, seasonNumber, episodeNumber);
-
-            // Save to recently watched
-            saveToRecentlyWatched({
-                id: showId,
-                title: showTitle,
-                type: 'tv',
-                season: seasonNumber,
-                episode: episodeNumber
-            });
-        }
-
-        function saveToRecentlyWatched(show) {
-            let recentlyWatched = JSON.parse(localStorage.getItem('recentlyWatched')) || [];
-            const existingIndex = recentlyWatched.findIndex(item => item.id === show.id && item.type === 'tv');
-            
-            if (existingIndex !== -1) {
-                recentlyWatched.splice(existingIndex, 1);
-            }
-            
-            recentlyWatched.unshift(show);
-            recentlyWatched = recentlyWatched.slice(0, 10); // Keep only the 10 most recent items
-            localStorage.setItem('recentlyWatched', JSON.stringify(recentlyWatched));
         }
 
         async function initializePlayer() {
@@ -189,22 +213,8 @@
             loadEpisode(currentSeason, currentEpisode);
         });
 
-        let adWarningShown = false;
-
-        function showAdWarning() {
-            if (!adWarningShown) {
-                document.getElementById('ad-warning').classList.remove('hidden');
-                adWarningShown = true;
-            }
-        }
-
-        document.getElementById('close-ad-warning').addEventListener('click', function() {
-            document.getElementById('ad-warning').classList.add('hidden');
-        });
-
-        // Show ad warning after 10 seconds
-        setTimeout(showAdWarning, 10000);
-
+        populateServerDropdown();  // Initialize the dropdown with available servers
+        populateServerList();  // Display the list of servers with remove buttons
         initializePlayer();
     </script>
 </body>
