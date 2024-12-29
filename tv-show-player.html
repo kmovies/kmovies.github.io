@@ -45,11 +45,6 @@
                 <select id="server-select" class="bg-gray-800 text-white px-2 py-1 rounded">
                     <!-- Server options will be dynamically populated here -->
                 </select>
-
-                <!-- Display list of servers with "Remove" buttons -->
-                <div id="server-list" class="mt-4">
-                    <!-- Server remove buttons will be dynamically populated here -->
-                </div>
             </div>
 
             <div id="player" class="bg-black" style="height: 85vh;">
@@ -97,14 +92,17 @@
         document.getElementById('show-title').textContent = showTitle;
         document.getElementById('back-link').href = `tv-shows.html`;
 
-        // Load servers from localStorage or use default servers
-        let servers = JSON.parse(localStorage.getItem('servers')) || {
+        // Define the servers object in the code
+        let servers = {
             vidsrc: 'https://player.vidsrc.nl/embed/tv',
             muvsrc: 'https://muvsrc.ru/embed/tv',
             vidsrc2: 'https://vidsrc.xyz/embed/tv'
         };
 
-        // Populate the server dropdown and the server list
+        // Manually remove the server from the code by deleting the key from the servers object
+        delete servers.vidsrc2; // Example: Remove the "vidsrc2" server from the code
+
+        // Populate the server dropdown dynamically
         function populateServerDropdown() {
             const serverSelect = document.getElementById('server-select');
             serverSelect.innerHTML = ''; // Clear existing options
@@ -114,37 +112,6 @@
                 option.textContent = key;
                 serverSelect.appendChild(option);
             }
-        }
-
-        // Display list of servers with remove buttons
-        function populateServerList() {
-            const serverList = document.getElementById('server-list');
-            serverList.innerHTML = ''; // Clear existing server list
-            for (const [key, value] of Object.entries(servers)) {
-                const serverItem = document.createElement('div');
-                serverItem.classList.add('flex', 'items-center', 'mb-2');
-                
-                const serverName = document.createElement('span');
-                serverName.textContent = key + " (" + value + ")";
-                serverName.classList.add('text-white', 'mr-2');
-                
-                const removeButton = document.createElement('button');
-                removeButton.textContent = 'Remove';
-                removeButton.classList.add('bg-red-500', 'text-white', 'px-2', 'py-1', 'ml-2', 'rounded');
-                removeButton.onclick = () => removeServer(key);
-
-                serverItem.appendChild(serverName);
-                serverItem.appendChild(removeButton);
-                serverList.appendChild(serverItem);
-            }
-        }
-
-        // Function to remove a server
-        function removeServer(serverKey) {
-            delete servers[serverKey];
-            localStorage.setItem('servers', JSON.stringify(servers));
-            populateServerDropdown();  // Re-populate the dropdown
-            populateServerList();  // Re-populate the server list
         }
 
         function loadPlayer(server, seasonNumber, episodeNumber) {
@@ -213,8 +180,8 @@
             loadEpisode(currentSeason, currentEpisode);
         });
 
-        populateServerDropdown();  // Initialize the dropdown with available servers
-        populateServerList();  // Display the list of servers with remove buttons
+        // Initialize server dropdown with available servers
+        populateServerDropdown();
         initializePlayer();
     </script>
 </body>
