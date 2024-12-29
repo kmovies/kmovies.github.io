@@ -106,18 +106,16 @@
         function populateServerDropdown() {
             const serverSelect = document.getElementById('server-select');
             serverSelect.innerHTML = ''; // Clear existing options
-            
-            // Add a default option (optional)
-            const defaultOption = document.createElement('option');
-            defaultOption.value = '';
-            defaultOption.textContent = 'Select a Server';
-            serverSelect.appendChild(defaultOption);
 
             // Loop through the servers object to populate the dropdown
             for (const [key, value] of Object.entries(servers)) {
                 const option = document.createElement('option');
                 option.value = key;
                 option.textContent = key;
+                // Set the default selected server to 'vidsrc2'
+                if (key === 'vidsrc2') {
+                    option.selected = true;
+                }
                 serverSelect.appendChild(option);
             }
         }
