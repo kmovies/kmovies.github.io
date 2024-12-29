@@ -99,13 +99,21 @@
             vidsrc2: 'https://vidsrc.xyz/embed/tv'
         };
 
-        // Manually remove the server from the code by deleting the key from the servers object
-        delete servers.vidsrc2; // Example: Remove the "vidsrc2" server from the code
+        // Example: Manually remove a server from the object (comment/uncomment lines as needed)
+        // delete servers.vidsrc2; // Uncomment this to remove the "vidsrc2" server from the list
 
         // Populate the server dropdown dynamically
         function populateServerDropdown() {
             const serverSelect = document.getElementById('server-select');
             serverSelect.innerHTML = ''; // Clear existing options
+            
+            // Add a default option (optional)
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.textContent = 'Select a Server';
+            serverSelect.appendChild(defaultOption);
+
+            // Loop through the servers object to populate the dropdown
             for (const [key, value] of Object.entries(servers)) {
                 const option = document.createElement('option');
                 option.value = key;
